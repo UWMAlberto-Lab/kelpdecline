@@ -1,0 +1,11 @@
+Package: kelpdecline
+Type: Package
+Title: Estimate kelp decline from historical baseline of Landsat estimated kelp biomass
+Version: 1.0
+Date: 2023-02-19
+Author: Nathaniel Tennies and Filipe Alberto
+Maintainer: Filipe Alberto <albertof@uwm.edu>
+Description: Estimates proportion of Landsat pixels with kelp biomass in decline when compared to historical baseline. 
+    The proportions are given for quarter degree cells in Central, Southern and Baja California.
+Imports: ncdf4, sp, raster
+License: GPL (>=2)
