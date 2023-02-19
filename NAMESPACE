@@ -1,0 +1,6 @@
+export("decline_finder", "nc_convert")
+import(sp)
+importFrom("stats", "na.omit")
+importFrom("utils", "write.table")
+import(raster)
+import(ncdf4)
