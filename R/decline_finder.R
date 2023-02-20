@@ -4,7 +4,11 @@ function(data,baseline_threshold=0.1,scarce_cutoff=0.6,present_window=16,hist_pe
   
   
   #loading in the dataset
-  kelp_biomass_data=data[,-c((ncol(data)-window_lag):ncol(data))]
+  if(window_lag>0){kelp_biomass_data=data[,-c((ncol(data)+1-window_lag):ncol(data))]}else{
+    kelp_biomass_data=data}
+  
+  #kelp_biomass_data=data[,-c((ncol(data)-window_lag):ncol(data))]
+  
   
   ####MEAN CALCULATIONS#####
   mean_data=kelp_biomass_data[,-c(5:ncol(kelp_biomass_data))]#we're just using the structure of kelp_biomass_data to create a new dataframe 
