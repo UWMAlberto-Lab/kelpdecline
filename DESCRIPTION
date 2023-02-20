@@ -1,7 +1,7 @@
 Package: kelpdecline
 Type: Package
 Title: Estimate kelp decline from historical baseline of Landsat estimated kelp biomass
-Version: 1.0
+Version: 0.1.0
 Date: 2023-02-19
 Author: Nathaniel Tennies and Filipe Alberto
 Maintainer: Filipe Alberto <albertof@uwm.edu>
