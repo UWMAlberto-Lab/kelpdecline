@@ -7,8 +7,8 @@ function(data,baseline_threshold=0.1,scarce_cutoff=0.6,present_window=16,hist_pe
   if(window_lag>0){kelp_biomass_data=data[,-c((ncol(data)+1-window_lag):ncol(data))]}else{
     kelp_biomass_data=data}
   
-  kelp_biomass_data=kelp_biomass_data[(kelp_biomass_data$Long>=lon_min  & kelp_biomass_data$Long=<lon_max
-                                       &  kelp_biomass_data$Lat>=lat_min  &  kelp_biomass_data$Lat=<lat_max), ]
+  kelp_biomass_data=kelp_biomass_data[(kelp_biomass_data$Long>=lon_min  & kelp_biomass_data$Long<=lon_max
+                                       &  kelp_biomass_data$Lat>=lat_min  &  kelp_biomass_data$Lat<=lat_max), ]
   
   #kelp_biomass_data=data[,-c((ncol(data)-window_lag):ncol(data))]
   
