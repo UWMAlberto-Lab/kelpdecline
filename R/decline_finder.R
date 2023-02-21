@@ -131,6 +131,9 @@ function(data,baseline_threshold=0.1,scarce_cutoff=0.6,present_window=16,hist_pe
     colnames(raster_table)[c((ncol(raster_table)-1),ncol(raster_table))]=c("present_quarter","mean_start_quarter")
     raster_table[1,ncol(raster_table)-1]=sub("Biomass.","",colnames(kelp_biomass_data)[ncol(kelp_biomass_data)])
     raster_table[1,ncol(raster_table)]=sub("Biomass.","",colnames(kelp_biomass_data)[start_column])
+    raster_table[,1]<-round(raster_table[,1],3)
+    raster_table[,3]<-round(raster_table[,3],1)
+    raster_table[,4]<-round(raster_table[,4],3)
     
     assign(table_name,raster_table)
     write.table(raster_table,file=table_name,row.names=F, quote=F, sep="\t")
