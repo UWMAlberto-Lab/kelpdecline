@@ -66,7 +66,7 @@ hist_period = 100, window_lag = 0, lat_min = 27.01, lat_max = 37.5, lon_min = -1
    table_name.
 }
 \references{
-    Tennies N, Alberto F. (in prep) A tool for detecting kelp canopy biomass decline in Southern and Baja California.
+    Tennies N, Alberto F. (in prep) A tool for detecting kelp canopy biomass decline in Central, Southern and Baja California.
 }
 \author{
    Nathaniel Tennies and Filipe Alberto

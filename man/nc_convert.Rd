@@ -19,7 +19,7 @@ nc_convert(nc_data_location)
     Each pixel with kelp is a row in the data frame, whereas columns contain temporal variation recorded by quarter.
 }
 \references{
-Tennies N, Alberto F. (in prep) A tool for detecting kelp canopy biomass decline in Southern and Baja California
+Tennies N, Alberto F. (in prep) A tool for detecting kelp canopy biomass decline in Central, Southern and Baja California
 }
 \author{
 Nathaniel Tennies and Filipe Alberto

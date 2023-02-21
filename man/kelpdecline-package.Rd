@@ -20,7 +20,7 @@
 Maintainer: Filipe Alberto albertof@uwm.edu
 }
 \references{
-    Tennies N, Alberto F. (in prep) A tool for detecting kelp canopy biomass decline in Southern and Baja California.
+    Tennies N, Alberto F. (in prep) A tool for detecting kelp canopy biomass decline in Central, Southern and Baja California.
 
     Bell, T. W., Cavanaugh, K. C., and Siegel, D. A. (2017). SBC LTER: Time series of quarterly netcdf files of kelp 
     biomass in the canopy from Landsat 5, 7 and 8, 1984-2016 (ongoing). Santa Barbara Coastal LTER.
