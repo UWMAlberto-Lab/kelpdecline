@@ -96,8 +96,8 @@ function(data,baseline_threshold=0.1,scarce_cutoff=0.6,present_window=16,hist_pe
     cell_filter=!(as.vector(seq(1:length(values(ratio_raster))) %in% attr(raster_table,"na.action")))
     raster_table=as.data.frame(as.vector(raster_table));colnames(raster_table)="decline_proportion" 
     
-    total_pixels=values(count_raster_non_scarce)[cell_filter]
-    raster_table=cbind(raster_table,total_pixels)
+    Pixels=values(count_raster_non_scarce)[cell_filter]
+    raster_table=cbind(raster_table,Pixels)
     
     cell_centers=sp::coordinates(empty_raster)[cell_filter,];colnames(cell_centers)=c("x","y")
     cell_corners=matrix(nrow=nrow(cell_centers),ncol=4);cell_corners[,c(1,3)]=-0.125;cell_corners[,c(2,4)]=0.125
@@ -110,23 +110,23 @@ function(data,baseline_threshold=0.1,scarce_cutoff=0.6,present_window=16,hist_pe
     non_scarce_mean_data=mean_data[non_scarce_filter,c(1:3)]
     
     #going cell by cell and taking the aggregate mean for each cell
-    cell_mean_biomass=vector(length = nrow(cell_centers))
+    AVG.biomass=vector(length = nrow(cell_centers))
     
-    for(i in 1:length(cell_mean_biomass)){
+    for(i in 1:length(AVG.biomass)){
       
       temp_filter= (cell_corners[i,1] < non_scarce_mean_data$Long) & (non_scarce_mean_data$Long < cell_corners[i,2]) & (cell_corners[i,3]< non_scarce_mean_data$Lat) & (non_scarce_mean_data$Lat < cell_corners[i,4])
       
       temp_biomasses= non_scarce_mean_data$mean[temp_filter]
       cell_mean=mean(temp_biomasses)
       
-      cell_mean_biomass[i]=cell_mean
+      AVG.biomass[i]=cell_mean
       
       
     }
     
-    raster_table=cbind(raster_table,cell_mean_biomass)
+    raster_table=cbind(raster_table,AVG.biomass)
     
-    upper_kelp_area_km_sq=0.03*0.03*total_pixels; raster_table=cbind(raster_table,upper_kelp_area_km_sq)
+    kelp.area_km.sq=0.03*0.03*Pixels; raster_table=cbind(raster_table, kelp.area_km.sq)
     
     raster_table=cbind(raster_table,cell_corners,rep(NA,nrow(raster_table)),rep(NA,nrow(raster_table)))
     
