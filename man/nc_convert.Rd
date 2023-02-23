@@ -19,7 +19,10 @@ nc_convert(nc_data_location)
     Each pixel with kelp is a row in the data frame, whereas columns contain temporal variation recorded by quarter.
 }
 \references{
-Tennies N, Alberto F. (in prep) A tool for detecting kelp canopy biomass decline in Central, Southern and Baja California
+ Tennies, N., Alberto, F. (in prep) A tool for detecting giant kelp canopy biomass decline in the Californias.
+ 
+ Bell, T, K. Cavanaugh, D. Siegel. (2023) SBC LTER: Time series of quarterly NetCDF files of kelp biomass in the canopy from Landsat 5, 7 and 8, since 1984 (ongoing) ver 19. Environmental Data Initiative.
+https://doi.org/10.6073/pasta/630565d6a8bf54c7cbce6802284dd431. Accessed 2023-02-22.
 }
 \author{
 Nathaniel Tennies and Filipe Alberto
