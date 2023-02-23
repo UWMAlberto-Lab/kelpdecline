@@ -7,4 +7,4 @@ of a historical baseline and is valuable for all kelp forest conservation purpos
 al. 2022). Further considerations are found in the companion publication describing this package (Tennies &
 Alberto, in prep).
 
-Please read the Example_kelpdecline_run pdf for more a detailed example on the package.
+Please read the [Example_kelpdecline_run.pdf](https://github.com/falberto73/kelpdecline/blob/main/Example_kelpdecline_run.pdf) for more a detailed example on the package.
