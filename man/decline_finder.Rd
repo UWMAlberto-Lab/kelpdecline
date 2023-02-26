@@ -77,5 +77,6 @@ https://doi.org/10.6073/pasta/630565d6a8bf54c7cbce6802284dd431. Accessed 2023-02
 }
 \seealso{
     \code{\link{nc_convert}}
+    \code{\link{occupancy_trend}}
 }
 \keyword{ IO }
