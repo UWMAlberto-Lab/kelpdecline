@@ -2,7 +2,6 @@ occupancy_trend<-function(data, present_year=2022, outFile="Out.DF.txt",test=FAL
 
 if(!present_year%in%(2000:2022))stop("Error: Check that present_year is numeric and not older than 2000")
 
-
 #Number of quarters in the data set
 nquarters<-(ncol(data)-2)
 Years<-matrix(unlist(strsplit(names(data[3:(nquarters+2)]),"\\.")),ncol=3,byrow=T)[,2]
@@ -27,7 +26,7 @@ for(long in longV){
         if(length(temp)!=0) {
        		 	    CellIndexes<-append(CellIndexes,list(temp))
        		 	     CellNames<-c(CellNames,paste(lat,long,sep=";"))
-        		    }	   
+        		    }
  }
 }
 names(CellIndexes)<-CellNames
@@ -35,28 +34,27 @@ names(CellIndexes)<-CellNames
 #Total number of cells
 print("Estimating present occupancy")
 PresentOccup<-apply(kelp_biomass_data[ ,  (nquarters -1):(nquarters+2)  ],1,function(x) as.integer(any(x!=0,na.rm=T)) )
-   	
+
 #Estimate the probability of pixel occurrence. This is simply how many years the pixel was present in at least one quarter
 #First transform the data to yearly and binomial. First a vector of years
 Years<-matrix(unlist(strsplit(names(kelp_biomass_data[3:(nquarters+2)]),"\\.")),ncol=3,byrow=T)[,2]
- 
-print("Estimating the historical probability of pixel occupancy")
+
+print("Estimating the Long term annual probability of pixel occupancy")
 KelpPresentY.Freq<-apply(kelp_biomass_data[, 3:(nquarters+2)], 1 ,function(x)sum( tapply(x,Years,function(y)any(y!=0)),na.rm=T))
-  
+
 KelpYearsWithData<-apply(kelp_biomass_data[, 3:(nquarters+2)], 1 ,function(x)sum( tapply(x,Years,function(y){!all(is.na(y))}) ))
 
 #This is the proportion of years where kelp was observed in at least one quarter
 HistPropYearOc<-KelpPresentY.Freq/ KelpYearsWithData
-  
+
 #Deficit, this is the difference between occupancy in the present and proportion (probability of pixel being occupied each year)
 PresObs.Minus.HistYearOcc<-PresentOccup-HistPropYearOc
-  
- 
+
 #Now lets sum the PresObs.Minus.HistYearOcc by Region
 #First a data.frame with a row per region (cells)
 if(test){  #If condition for using a significance test or not
 ProbDeclineDF<-data.frame(matrix(nrow=length(CellIndexes),ncol=10))
-names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","Obs.AVG.Balance","Present.AVG.Occup","Hist.AVG.Prob","LowerQ","UpperQ","Sig")
+names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","Trend","RYPO","LTPAPO","LowerQ","UpperQ","Sig")
 
 for(cell in 1: length(CellIndexes)){
    coords<-unlist(strsplit(names(CellIndexes)[cell],";"))
@@ -64,9 +62,9 @@ for(cell in 1: length(CellIndexes)){
    ProbDeclineDF$Long[cell]<-as.numeric(coords[2])
    ProbDeclineDF$N.Pixel[cell]<-length(CellIndexes[[cell]])
    ProbDeclineDF$AVG.Biomass[cell]<-round(sum(apply(kelp_biomass_data[ CellIndexes[[cell]] , (nquarters -1):(nquarters+2) ],1,max),na.rm=T),1)
-   ProbDeclineDF$Obs.AVG.Balance[cell]<-round(mean(PresObs.Minus.HistYearOcc[CellIndexes[[cell]]],na.rm=T),4)
-   ProbDeclineDF$Present.AVG.Occup[cell]<-round(mean( PresentOccup[CellIndexes[[cell]]]),4)
-   ProbDeclineDF$Hist.AVG.Prob[cell]<-round(mean(HistPropYearOc[CellIndexes[[cell]]]),4)
+   ProbDeclineDF$Trend[cell]<-round(mean(PresObs.Minus.HistYearOcc[CellIndexes[[cell]]],na.rm=T),4)
+   ProbDeclineDF$RYPO[cell]<-round(mean( PresentOccup[CellIndexes[[cell]]]),4)
+   ProbDeclineDF$LTPAPO[cell]<-round(mean(HistPropYearOc[CellIndexes[[cell]]]),4)
    #SignTest
      	print(paste0("Testing significance for cell ", cell))
        	testSample<-sapply(HistPropYearOc[CellIndexes[[cell]]],function(p) sample(x=c(1,0), replace=T,size=npermuts,  prob=c(p,1-p)))
@@ -74,14 +72,14 @@ for(cell in 1: length(CellIndexes)){
        	avg.balance.rand<-apply((t(RandBalance)),1,mean)
    ProbDeclineDF$LowerQ[cell]<-round(quantile(avg.balance.rand,0.001),4)
    ProbDeclineDF$UpperQ[cell]<-round(quantile(avg.balance.rand,0.999),4)
-   ProbDeclineDF$Sig[cell]<-ifelse(ProbDeclineDF$Obs.AVG.Balance[cell]<=ProbDeclineDF$LowerQ[cell] | ProbDeclineDF$Obs.AVG.Balance[cell]>=ProbDeclineDF$UpperQ[cell],
+   ProbDeclineDF$Sig[cell]<-ifelse(ProbDeclineDF$Trend[cell]<=ProbDeclineDF$LowerQ[cell] | ProbDeclineDF$Trend[cell]>=ProbDeclineDF$UpperQ[cell],
         				"Sign.","NS")
    print(paste0("Completed test for cell ",cell, " out of ",length(CellIndexes)))
    }
-   ProbDeclineDF$Trend<-ifelse(ProbDeclineDF$Sig=="Sign.",  ifelse(ProbDeclineDF$Obs.AVG.Balance>0,"UP","DOWN"),"NS")}else
+   ProbDeclineDF$Direction<-ifelse(ProbDeclineDF$Sig=="Sign.",  ifelse(ProbDeclineDF$Trend>0,"UP","DOWN"),"NS")}else
    {
    ProbDeclineDF<-data.frame(matrix(nrow=length(CellIndexes),ncol=7))
-   names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","Obs.AVG.Balance","Present.AVG.Occup","Hist.AVG.Prob")
+   names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","Trend","RYPO","LTPAPO")
    npermuts=5000
 
 for(cell in 1: length(CellIndexes)){
@@ -90,25 +88,25 @@ for(cell in 1: length(CellIndexes)){
   ProbDeclineDF$Long[cell]<-as.numeric(coords[2])
   ProbDeclineDF$N.Pixel[cell]<-length(CellIndexes[[cell]])
   ProbDeclineDF$AVG.Biomass[cell]<-round(sum(apply(kelp_biomass_data[ CellIndexes[[cell]] , (nquarters -1):(nquarters+2) ],1,max),na.rm=T),1)
-  ProbDeclineDF$Obs.AVG.Balance[cell]<-round(mean(PresObs.Minus.HistYearOcc[CellIndexes[[cell]]],na.rm=T),4)
-  ProbDeclineDF$Present.AVG.Occup[cell]<-round(mean( PresentOccup[CellIndexes[[cell]]]),4)
-  ProbDeclineDF$Hist.AVG.Prob[cell]<-round(mean(HistPropYearOc[CellIndexes[[cell]]]),4)
+  ProbDeclineDF$Trend[cell]<-round(mean(PresObs.Minus.HistYearOcc[CellIndexes[[cell]]],na.rm=T),4)
+  ProbDeclineDF$RYPO[cell]<-round(mean( PresentOccup[CellIndexes[[cell]]]),4)
+  ProbDeclineDF$LTPAPO[cell]<-round(mean(HistPropYearOc[CellIndexes[[cell]]]),4)
   #print(paste0("Completed cell ",cell, " out of ",length(CellIndexes)))
    }
-   
-  ProbDeclineDF$Trend<-ifelse(ProbDeclineDF$Obs.AVG.Balance>0,"UP","DOWN")
+
+  ProbDeclineDF$Direction<-ifelse(ProbDeclineDF$Trend>0,"UP","DOWN")
   }
-      
-  o1<-order( ProbDeclineDF$Lat,decreasing=T)   
-  ProbDeclineDF<-ProbDeclineDF[o1,]   
-    
-  #writing to file      
+  o1<-order( ProbDeclineDF$Lat,decreasing=T)
+  ProbDeclineDF<-ProbDeclineDF[o1,]
+
+  #writing to file
   write.table(ProbDeclineDF,outFile,quote=F,row.names=F,sep="\t")
-        
-  RasterBalance<-rasterFromXYZ(data.frame(x=ProbDeclineDF$Long+0.125,y=ProbDeclineDF$Lat+0.125,z=ProbDeclineDF$Obs.AVG.Balance))
+
+  RasterBalance<-rasterFromXYZ(data.frame(x=ProbDeclineDF$Long+0.125,y=ProbDeclineDF$Lat+0.125,z=ProbDeclineDF$Trend))
   crs(RasterBalance)<-"+proj=longlat +datum=WGS84"
-    
+
  return(RasterBalance)
 }
-  
-  
+
+
+

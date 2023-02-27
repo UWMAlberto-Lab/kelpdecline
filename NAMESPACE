@@ -1,4 +1,4 @@
-export("decline_finder", "nc_convert")
+export("decline_finder", "nc_convert","occupancy_trend")
 import(sp)
 importFrom("stats", "na.omit")
 importFrom("utils", "write.table")
