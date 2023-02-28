@@ -54,7 +54,7 @@ PresObs.Minus.HistYearOcc<-PresentOccup-HistPropYearOc
 #First a data.frame with a row per region (cells)
 if(test){  #If condition for using a significance test or not
 ProbDeclineDF<-data.frame(matrix(nrow=length(CellIndexes),ncol=10))
-names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","Trend","RYPO","LTPAPO","LowerQ","UpperQ","Sig")
+names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","RYPO","LTPAPO","Trend","LowerQ","UpperQ","Sig")
 
 for(cell in 1: length(CellIndexes)){
    coords<-unlist(strsplit(names(CellIndexes)[cell],";"))
