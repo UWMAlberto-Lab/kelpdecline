@@ -79,7 +79,7 @@ for(cell in 1: length(CellIndexes)){
    ProbDeclineDF$Direction<-ifelse(ProbDeclineDF$Sig=="Sign.",  ifelse(ProbDeclineDF$Trend>0,"UP","DOWN"),"NS")}else
    {
    ProbDeclineDF<-data.frame(matrix(nrow=length(CellIndexes),ncol=7))
-   names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","Trend","RYPO","LTPAPO")
+   names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","RYPO","LTPAPO","Trend")
    npermuts=5000
 
 for(cell in 1: length(CellIndexes)){
