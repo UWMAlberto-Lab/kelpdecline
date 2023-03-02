@@ -1,5 +1,6 @@
-occupancy_trend<-function(data, present_year=2022, outFile="Out.DF.txt",test=FALSE,npermuts=1000,
-                          lat_min=27.01,lat_max=37.5,lon_min=-123.5,lon_max=-114){
+occupancy_trend<-function(data, present_year=2022, outFile="Out.DF.txt",test=FALSE,npermuts=1000){
+requireNamespace("sp")
+requireNamespace("raster")
 
 if(!present_year%in%(2000:2022))stop("Error: Check that present_year is numeric and not older than 2000")
 
@@ -11,9 +12,6 @@ Years<-Years[YearFilter]
 
 kelp_biomass_data<-data[,c(T,T,YearFilter)]
 nquarters<-(ncol(kelp_biomass_data)-2)
-
-kelp_biomass_data<-kelp_biomass_data[(kelp_biomass_data$Long>=lon_min &  kelp_biomass_data$Long<=lon_max) &
-                                      (kelp_biomass_data$Lat>=lat_min &  kelp_biomass_data$Lat<=lat_max) , ]
 
 
 
