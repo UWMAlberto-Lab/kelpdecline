@@ -94,7 +94,7 @@ function(data,baseline_threshold=0.1,scarce_cutoff=0.6,present_window=16,hist_pe
 
     raster_table=na.omit(values(ratio_raster))
     cell_filter=!(as.vector(seq(1:length(values(ratio_raster))) %in% attr(raster_table,"na.action")))
-    raster_table=as.data.frame(as.vector(raster_table));colnames(raster_table)="decline_proportion"
+    raster_table=as.data.frame(as.vector(raster_table));colnames(raster_table)="PPD"
 
     Pixels=values(count_raster_non_scarce)[cell_filter]
     raster_table=cbind(raster_table,Pixels)

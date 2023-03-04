@@ -58,7 +58,7 @@ PresObs.Minus.HistYearOcc<-PresentOccup-HistPropYearOc
 #First a data.frame with a row per region (cells)
 if(test){  #If condition for using a significance test or not
 ProbDeclineDF<-data.frame(matrix(nrow=length(CellIndexes),ncol=10))
-names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","RYPO","LTPAPO","Trend","LowerQ","UpperQ","Sig")
+names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","RYPO","LTPAPO","POT","LowerQ","UpperQ","Sig")
 
 for(cell in 1: length(CellIndexes)){
    coords<-unlist(strsplit(names(CellIndexes)[cell],";"))
@@ -66,7 +66,7 @@ for(cell in 1: length(CellIndexes)){
    ProbDeclineDF$Long[cell]<-as.numeric(coords[2])
    ProbDeclineDF$N.Pixel[cell]<-length(CellIndexes[[cell]])
    ProbDeclineDF$AVG.Biomass[cell]<-round(sum(apply(kelp_biomass_data[ CellIndexes[[cell]] , (nquarters -1):(nquarters+2) ],1,max),na.rm=T),1)
-   ProbDeclineDF$Trend[cell]<-round(mean(PresObs.Minus.HistYearOcc[CellIndexes[[cell]]],na.rm=T),4)
+   ProbDeclineDF$POT[cell]<-round(mean(PresObs.Minus.HistYearOcc[CellIndexes[[cell]]],na.rm=T),4)
    ProbDeclineDF$RYPO[cell]<-round(mean( PresentOccup[CellIndexes[[cell]]]),4)
    ProbDeclineDF$LTPAPO[cell]<-round(mean(HistPropYearOc[CellIndexes[[cell]]]),4)
    #SignTest
@@ -76,14 +76,14 @@ for(cell in 1: length(CellIndexes)){
        	avg.balance.rand<-apply((t(RandBalance)),1,mean)
    ProbDeclineDF$LowerQ[cell]<-round(quantile(avg.balance.rand,0.001),4)
    ProbDeclineDF$UpperQ[cell]<-round(quantile(avg.balance.rand,0.999),4)
-   ProbDeclineDF$Sig[cell]<-ifelse(ProbDeclineDF$Trend[cell]<=ProbDeclineDF$LowerQ[cell] | ProbDeclineDF$Trend[cell]>=ProbDeclineDF$UpperQ[cell],
+   ProbDeclineDF$Sig[cell]<-ifelse(ProbDeclineDF$POT[cell]<=ProbDeclineDF$LowerQ[cell] | ProbDeclineDF$POT[cell]>=ProbDeclineDF$UpperQ[cell],
         				"Sign.","NS")
    print(paste0("Completed test for cell ",cell, " out of ",length(CellIndexes)))
    }
-   ProbDeclineDF$Direction<-ifelse(ProbDeclineDF$Sig=="Sign.",  ifelse(ProbDeclineDF$Trend>0,"UP","DOWN"),"NS")}else
+   ProbDeclineDF$Direction<-ifelse(ProbDeclineDF$Sig=="Sign.",  ifelse(ProbDeclineDF$POT>0,"UP","DOWN"),"NS")}else
    {
    ProbDeclineDF<-data.frame(matrix(nrow=length(CellIndexes),ncol=7))
-   names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","RYPO","LTPAPO","Trend")
+   names(ProbDeclineDF)<-c("Lat","Long","N.Pixel","AVG.Biomass","RYPO","LTPAPO","POT")
    npermuts=5000
 
 for(cell in 1: length(CellIndexes)){
@@ -92,13 +92,13 @@ for(cell in 1: length(CellIndexes)){
   ProbDeclineDF$Long[cell]<-as.numeric(coords[2])
   ProbDeclineDF$N.Pixel[cell]<-length(CellIndexes[[cell]])
   ProbDeclineDF$AVG.Biomass[cell]<-round(sum(apply(kelp_biomass_data[ CellIndexes[[cell]] , (nquarters -1):(nquarters+2) ],1,max),na.rm=T),1)
-  ProbDeclineDF$Trend[cell]<-round(mean(PresObs.Minus.HistYearOcc[CellIndexes[[cell]]],na.rm=T),4)
+  ProbDeclineDF$POT[cell]<-round(mean(PresObs.Minus.HistYearOcc[CellIndexes[[cell]]],na.rm=T),4)
   ProbDeclineDF$RYPO[cell]<-round(mean( PresentOccup[CellIndexes[[cell]]]),4)
   ProbDeclineDF$LTPAPO[cell]<-round(mean(HistPropYearOc[CellIndexes[[cell]]]),4)
   #print(paste0("Completed cell ",cell, " out of ",length(CellIndexes)))
    }
 
-  ProbDeclineDF$Direction<-ifelse(ProbDeclineDF$Trend>0,"UP","DOWN")
+  ProbDeclineDF$Direction<-ifelse(ProbDeclineDF$POT>0,"UP","DOWN")
   }
   o1<-order( ProbDeclineDF$Lat,decreasing=T)
   ProbDeclineDF<-ProbDeclineDF[o1,]
@@ -106,7 +106,7 @@ for(cell in 1: length(CellIndexes)){
   #writing to file
   write.table(ProbDeclineDF,outFile,quote=F,row.names=F,sep="\t")
 
-  RasterBalance<-rasterFromXYZ(data.frame(x=ProbDeclineDF$Long+0.125,y=ProbDeclineDF$Lat+0.125,z=ProbDeclineDF$Trend))
+  RasterBalance<-rasterFromXYZ(data.frame(x=ProbDeclineDF$Long+0.125,y=ProbDeclineDF$Lat+0.125,z=ProbDeclineDF$POT))
   crs(RasterBalance)<-"+proj=longlat +datum=WGS84"
 
  return(RasterBalance)
