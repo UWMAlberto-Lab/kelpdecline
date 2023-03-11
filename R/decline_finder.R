@@ -1,8 +1,8 @@
 decline_finder <-
-function(data,baseline_threshold=0.1,scarce_cutoff=0.6,present_window=16,hist_period=100,window_lag=0,
+function(data,baseline_threshold=0.1,scarce_cutoff=0.4,present_window=16,hist_period=100,window_lag=0,
                            lat_min=27.01,lat_max=37.5,lon_min=-123.5,lon_max=-114,table_name=NULL) {
 
-
+  scarce_cutoff=(1-scarce_cutoff)
   #loading in the dataset
   if(window_lag>0){kelp_biomass_data=data[,-c((ncol(data)+1-window_lag):ncol(data))]}else{
     kelp_biomass_data=data}
