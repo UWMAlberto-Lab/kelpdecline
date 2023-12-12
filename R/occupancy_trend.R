@@ -109,7 +109,7 @@ for(cell in 1: length(CellIndexes)){
   write.table(ProbDeclineDF,outFile,quote=F,row.names=F,sep="\t")
 
   RasterBalance<-raster::rasterFromXYZ(data.frame(x=ProbDeclineDF$Long+0.125,y=ProbDeclineDF$Lat+0.125,z=ProbDeclineDF$POT))
-  crs(RasterBalance)<-"+proj=longlat +datum=WGS84"
+raster::crs(RasterBalance)<-"+proj=longlat +datum=WGS84"
 
  return(RasterBalance)
 }
