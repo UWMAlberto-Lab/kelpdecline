@@ -1,12 +1,14 @@
 occupancy_trend<-function(data, present_year=2022, outFile="Out.DF.txt",test=FALSE,npermuts=1000){
 requireNamespace("sp")
 requireNamespace("raster")
-
-if(!present_year%in%(2000:2022))stop("Error: Check that present_year is numeric and not older than 2000")
-
+	
 #Number of quarters in the data set
 nquarters<-(ncol(data)-2)
 Years<-matrix(unlist(strsplit(names(data[3:(nquarters+2)]),"\\.")),ncol=3,byrow=T)[,2]
+
+	if(!present_year%in%(2000:max(Years))stop("Error: Check that present_year is numeric and not older than 2000")
+
+
 YearFilter<-Years<=present_year
 Years<-Years[YearFilter]
 
