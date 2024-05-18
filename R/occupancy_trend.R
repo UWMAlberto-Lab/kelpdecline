@@ -6,7 +6,7 @@ requireNamespace("raster")
 nquarters<-(ncol(data)-2)
 Years<-matrix(unlist(strsplit(names(data[3:(nquarters+2)]),"\\.")),ncol=3,byrow=T)[,2]
 
-	if(!present_year%in%(2000:present_year)stop("Error: Check that present_year is numeric and not older than 2000")
+	if(!present_year%in%(2000:present_year))stop("Error: Check that present_year is numeric and not older than 2000")
 
 
 YearFilter<-Years<=present_year
