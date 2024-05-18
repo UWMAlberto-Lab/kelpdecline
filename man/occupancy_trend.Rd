@@ -7,7 +7,7 @@ Estimate trend of kelp canopy by comparing present with historical pixel occupan
 The function estimates a trend of kelp canopy by comparing present (yearly only) and historical occupancies. Results are summarized at the 0.25 x 0.25 degree (regions) scale.
 }
 \usage{
-occupancy_trend(data,present_year=2022,outFile="Out.DF.txt",test=FALSE,npermuts=1000)
+occupancy_trend(data,present_year,outFile="Out.DF.txt",test=FALSE,npermuts=1000)
 }
 \arguments{
      \item{data}{
